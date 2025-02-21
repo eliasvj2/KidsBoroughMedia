@@ -1,0 +1,17 @@
+h1{
+    color: orange;
+    text-align: center;
+    font-weight: bold;
+}
+#content{
+    text-align: center;
+    background-color: #F3EEEE;
+    border-radius: 5%;
+    max-width: 50%;
+    margin-left: 30%;
+    margin-top: 2%;
+}
+.text-purple{
+    color: purple;
+    font-weight: bold;
+}
