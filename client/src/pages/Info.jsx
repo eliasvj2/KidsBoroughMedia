@@ -44,7 +44,7 @@ const Info = () => {
     <div >
     {console.log(firstName)}
     <Nav/>
-    <h1>First we need to collect some information</h1>
+    <h1>Register</h1>
 
     <div  className=''>
      

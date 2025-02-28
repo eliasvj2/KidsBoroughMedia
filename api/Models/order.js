@@ -13,7 +13,8 @@ const order = new Schema({
   },
   userID: {
     type: String,
-    required: true
+    required: true,
+    ref: "User"
   }
   
 });

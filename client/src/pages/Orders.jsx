@@ -1,6 +1,7 @@
 import React from 'react'
 import Nav from '../components/Nav'
 
+
 const Orders = () => {
   return (
     <div>
@@ -9,6 +10,7 @@ const Orders = () => {
 
       <Nav/>
       <h1>Orders</h1>
+      
     </div>
   )
 }

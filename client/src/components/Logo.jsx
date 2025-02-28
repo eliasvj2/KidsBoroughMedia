@@ -5,9 +5,9 @@ const Logo = () => {
   return (
     <div> 
         <br />
-        <span id='span1'>Kid's  </span> <span id='span2'>Borough</span>
+        <span id='span1'>Kid's  </span> <span id='span2'>Corner</span>
         <br />
-        <span id = "span3">       MEDIA            </span>
+        <span id = "span3">       Author            </span>
         <hr />
 
 

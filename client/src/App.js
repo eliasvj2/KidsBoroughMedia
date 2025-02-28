@@ -7,6 +7,11 @@ import Upload from "./pages/Upload";
 import 'bootstrap/dist/css/bootstrap.css';
 import Info from './pages/Info';
 import Testing from './pages/Testing';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Products from './pages/Products';
+import Checkout from "./pages/Checkout";
+
 
 
 function App() {
@@ -18,8 +23,11 @@ function App() {
       <Route path="/order" element={<Orders/>} />
       <Route path="/tracking" element={<Tracking />} />
       <Route path="/upload" element={<Upload />} />
-      <Route path='/info' element={<Info/>}/>
+      <Route path='/register' element={<Register/>}/>
+      <Route path='/product' element={<Products/>}/>
+      <Route path='/checkout' element={<Checkout/>}/>
       <Route path='/testing' element={<Testing/>}/>
+      <Route path='/login' element={<Login/>}/>
     </Routes>
     </BrowserRouter>
   );

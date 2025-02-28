@@ -6,9 +6,13 @@ const bookSchema = new mongoose.Schema({
         required: true,
         },
     
-    imageURL: {
+    image: {
         type: [String]
         
+    },
+    order:{
+        type: String,
+        required: true
     }
     
 })

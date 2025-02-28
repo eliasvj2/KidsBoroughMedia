@@ -5,75 +5,35 @@ import mongoose from "mongoose";
 import connectDB from './config/dbConn.js';
 import * as dotenv from 'dotenv';
 import cors from "cors";
-import { participant } from "./Models/participant.js";
-
 dotenv.config();
-// const faciRoutes = require( "./routes/faci.js");
-// const partiRoutes = require( "./routes/parti.js");
+import authRoutes from "./routes/auth.js";
+import userRoutes from "./routes/user.js";
+import orderRoutes from "./routes/order.js";
+import cookieParser from "cookie-parser";
 
-
-
+//middleware to read documents as json and allow cross origin resource sharing
 app.use(express.json());
 app.use(cors());
+
+//Databse connection
 connectDB()
 
-app.get('/', async (req, res) => {
+//User routes and authorization routes.
+app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
+app.use("/order", orderRoutes);
 
-  
-});
-
-app.post("/info", async (req, res) =>{
-
-  try{
-  const {firstName, lastName, email} = req.body;
-  const newParticipant = {
-    firstName: firstName,
-    lastName: lastName,
-    email: email
-  }
-
-  //Check if the user already exist
-
-  const user = await participant.find({firstName: firstName});
-  if(user == null){
-      const part = await participant.create(newParticipant)
-      console.log(part)
-      return res.status(201).send(part);
-  }
-
-  
-  return res.send("User already exists.")
-  }
-
-  catch(err){
-    console.log(err);
-  }
+//Allow the use of cookies
+app.use(cookieParser);
 
 
-})
-app.get("/info", async (req, res)=>{
-  try{
-  console.log("hello world");
-  const documents = await participant.find({firstName: "john"});
-  return res.status(200).json({
-    count: participant.length,
-    data: documents
-  });
-  }
-  catch(err){
-    console.log(err);
-  }
-})
 
+//Database connection to mongoDB
 mongoose.connection.once('open', () => {
   console.log('Connected to MongoDB');
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   
 })
-
-// app.use("/api/facilitator", faciRoutes);
-// app.use("/api/participant", partiRoutes);
-
 
 mongoose.connection.on('error', err => {
   console.log(err)

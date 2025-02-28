@@ -1,9 +1,18 @@
 li{
     font-size: medium;
-    margin-right: 25%;
+    margin-right: 60%;
+    text-decoration: none;
+    margin-left: 10%;
     
 }
 
 .text-yellow{
     color: orange;
+}
+
+a:active{
+    border-bottom: 1px solid purple;
+}
+a:link{
+    text-decoration: none;
 }
