@@ -1,81 +1,88 @@
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { User } from "../Models/user";
+import { User } from "../Models/user.js";
 
 export const register = async (req, res) =>{
+    const { firstName, password, lastName, email, street, city, state, zip, phoneNumber, username } = req.body
+
+    // Confirm data
+    if (!username || !password) {
+        return res.status(400).json({ message: 'All fields are required' })
+    }
+
+    // Check for duplicate username
+    const duplicate = await User.findOne({ username }).collation({ locale: 'en', strength: 2 }).lean().exec()
+
+    if (duplicate) {
+        return res.status(409).json({ message: 'Duplicate username' })
+    }
+
+
+    // Hash password 
+    const hashedPwd = await bcrypt.hash(password, 10) // salt rounds
+
+    const newUser = {
+        name: {first: firstName, last: lastName},
+        userName: username,
+        email: email,
+        password: hashedPwd,
+        address: {
+            street: street,
+            state: state,
+            zipcode: zip,
+            city: city,
+        },
+        phoneNumber: phoneNumber
+        
+    };
+
+    // Create and store new user 
+    const user = await User.create(newUser)
+
+    if (user) { //created 
+        res.status(201).json({ message: `New user ${username} created` })
+    } else {
+        res.status(400).json({ message: 'Invalid user data received' })
+    }
 
 };
 
-export const refresh = async (req, res) => {
-    const cookies = req.cookies
-
-    if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' })
-
-    const refreshToken = cookies.jwt
-
-    jwt.verify(
-        refreshToken,
-        process.env.REFRESH_TOKEN_SECRET,
-        async (err, decoded) => {
-            if (err) return res.status(403).json({ message: 'Forbidden' })
-
-            const foundUser = await User.findOne({ username: decoded.username }).exec()
-
-            if (!foundUser) return res.status(401).json({ message: 'Unauthorized' })
-
-            const accessToken = jwt.sign(
-                {
-                    "UserInfo": {
-                        "username": foundUser.username,
-                        "roles": foundUser.roles
-                    }
-                },
-                process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '15m' }
-            )
-
-            res.json({ accessToken })
-        }
-    )
-};
 
 
 export const login = async (req, res) => {
     const { username, password } = req.body
+    
 
     if (!username || !password) {
         return res.status(400).json({ message: 'All fields are required' })
     }
 
-    const foundUser = await User.findOne({ username }).exec()
+    const foundUser = await User.find({ userName: username }).exec()
+    
 
-    if (!foundUser || !foundUser.active) {
+    if (!foundUser) {
         return res.status(401).json({ message: 'Unauthorized' })
     }
 
-    const match = await bcrypt.compare(password, foundUser.password)
+    const match = await bcrypt.compare(password, foundUser[0].password)
 
     if (!match) return res.status(401).json({ message: 'Unauthorized' })
+
+    console.log();
 
     const accessToken = jwt.sign(
         {
             "UserInfo": {
-                "username": foundUser.username,
-                "roles": foundUser.roles
+                "username": foundUser[0].name.first,
+                "roles": foundUser[0].roles
             }
         },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: '15m' }
     )
 
-    const refreshToken = jwt.sign(
-        { "username": foundUser.username },
-        process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: '7d' }
-    )
-
-    // Create secure cookie with refresh token 
-    res.cookie('jwt', refreshToken, {
+    // Create secure cookie with access token 
+    res.cookie('jwt', accessToken, {
         httpOnly: true, //accessible only by web server 
         secure: true, //https
         sameSite: 'None', //cross-site cookie 

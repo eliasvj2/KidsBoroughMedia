@@ -1,9 +1,51 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Nav from '../components/Nav'
 import "../css/register.css"
+import { useNavigate } from 'react-router'
+import axios from 'axios'
 
 
 const Register = () => {
+  const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [street, setStreet] = useState('');
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
+    const [zip, setZip] = useState('');
+    const [phoneNumber, setphoneNumber] = useState('');
+    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
+    const navigate = useNavigate();
+
+    const handleChange = () => {
+
+      const data = {
+        firstName,
+        lastName,
+        email,
+        street,
+        city,
+        state,
+        zip,
+        phoneNumber,
+        username,
+        password
+      };
+     
+      axios.post('http://localhost:3500/auth/register', data)
+        .then(() => {
+          
+          navigate('/login');
+        })
+        .catch((error) => {
+          
+          // alert('An error happened. Please Check console');
+          
+          console.log(error);
+        });
+    };
+
   return (
     <div>
         <Nav/>
@@ -25,7 +67,8 @@ const Register = () => {
                     <div class="col-md-6 mb-4 pb-2">
 
                       <div data-mdb-input-init class="form-outline">
-                        <input type="text" id="form3Examplev2" class="form-control form-control-lg" />
+                        <input value={firstName}
+            onChange={(e) => setFirstName(e.target.value)} type="text" id="form3Examplev2" class="form-control form-control-lg" />
                         <label class="form-label" for="form3Examplev2">First name</label>
                       </div>
 
@@ -33,7 +76,7 @@ const Register = () => {
                     <div class="col-md-6 mb-4 pb-2">
 
                       <div data-mdb-input-init class="form-outline">
-                        <input type="text" id="form3Examplev3" class="form-control form-control-lg" />
+                        <input type="text" id="form3Examplev3" class="form-control form-control-lg" onChange={(e) => setLastName(e.target.value)}/>
                         <label class="form-label" for="form3Examplev3">Last name</label>
                       </div>
 
@@ -42,18 +85,18 @@ const Register = () => {
 
                   <div class="mb-4 pb-2">
                     <div data-mdb-input-init class="form-outline">
-                      <input type="text" id="form3Examplev4" class="form-control form-control-lg" />
+                      <input type="text" id="form3Examplev4" class="form-control form-control-lg" onChange={(e) => setUsername(e.target.value)}/>
                       <label class="form-label" for="form3Examplev4">Username</label>
                     </div>
                   </div>
 
                   <div class="mb-4 pb-2">
                     <div data-mdb-input-init class="form-outline">
-                      <input type="text" id="form3Examplev4" class="form-control form-control-lg" />
+                      <input type="text" id="form3Examplev4" class="form-control form-control-lg" onChange={(e) => setPassword(e.target.value)}/>
                       <label class="form-label" for="form3Examplev4">Password</label>
                     </div>
                   </div>
-
+{console.log(lastName)};
                   
 
                 </div>
@@ -64,15 +107,15 @@ const Register = () => {
 
                   <div class="mb-4 pb-2">
                     <div data-mdb-input-init class="form-outline form-white">
-                      <input type="text" id="form3Examplea2" class="form-control form-control-lg" />
+                      <input type="text" id="form3Examplea2" class="form-control form-control-lg" onChange={(e) => setStreet(e.target.value)}/>
                       <label class="form-label" for="form3Examplea2">Street + Nr</label>
                     </div>
                   </div>
 
                   <div class="mb-4 pb-2">
                     <div data-mdb-input-init class="form-outline form-white">
-                      <input type="text" id="form3Examplea3" class="form-control form-control-lg" />
-                      <label class="form-label" for="form3Examplea3">Additional Information</label>
+                      <input type="text" id="form3Examplea3" class="form-control form-control-lg" onChange={(e) => setState(e.target.value)}/>
+                      <label class="form-label" for="form3Examplea3">State</label>
                     </div>
                   </div>
 
@@ -80,16 +123,16 @@ const Register = () => {
                     <div class="col-md-5 mb-4 pb-2">
 
                       <div data-mdb-input-init class="form-outline form-white">
-                        <input type="text" id="form3Examplea4" class="form-control form-control-lg" />
-                        <label class="form-label" for="form3Examplea4">Zip Code</label>
+                        <input type="text" id="form3Examplea4" class="form-control form-control-lg" onChange={(e) => setCity(e.target.value)}/>
+                        <label class="form-label" for="form3Examplea4">City</label>
                       </div>
 
                     </div>
                     <div class="col-md-7 mb-4 pb-2">
 
                       <div data-mdb-input-init class="form-outline form-white">
-                        <input type="text" id="form3Examplea5" class="form-control form-control-lg" />
-                        <label class="form-label" for="form3Examplea5">Place</label>
+                        <input type="text" id="form3Examplea5" class="form-control form-control-lg" onChange={(e) => setZip(e.target.value)}/>
+                        <label class="form-label" for="form3Examplea5">Zip Code</label>
                       </div>
 
                     </div>
@@ -98,18 +141,11 @@ const Register = () => {
                   
 
                   <div class="row">
-                    <div class="col-md-5 mb-4 pb-2">
+                    
+                    <div class="mb-4">
 
                       <div data-mdb-input-init class="form-outline form-white">
-                        <input type="text" id="form3Examplea7" class="form-control form-control-lg" />
-                        <label class="form-label" for="form3Examplea7">Code +</label>
-                      </div>
-
-                    </div>
-                    <div class="col-md-7 mb-4 pb-2">
-
-                      <div data-mdb-input-init class="form-outline form-white">
-                        <input type="text" id="form3Examplea8" class="form-control form-control-lg" />
+                        <input type="text" id="form3Examplea8" class="form-control form-control-lg" onChange={(e) => setphoneNumber(e.target.value)}/>
                         <label class="form-label" for="form3Examplea8">Phone Number</label>
                       </div>
 
@@ -118,7 +154,7 @@ const Register = () => {
 
                   <div class="mb-4">
                     <div data-mdb-input-init class="form-outline form-white">
-                      <input type="text" id="form3Examplea9" class="form-control form-control-lg" />
+                      <input type="text" id="form3Examplea9" class="form-control form-control-lg" onChange={(e) => setEmail(e.target.value)}/>
                       <label class="form-label" for="form3Examplea9">Your Email</label>
                     </div>
                   </div>
@@ -132,7 +168,7 @@ const Register = () => {
                   </div>
 
                   <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg"
-                    data-mdb-ripple-color="dark">Register</button>
+                    data-mdb-ripple-color="dark" onClick={handleChange}>Register</button>
 
                 </div>
               </div>

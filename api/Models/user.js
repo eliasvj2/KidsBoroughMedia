@@ -1,10 +1,6 @@
 import mongoose from "mongoose"
 
 const UserSchema = new mongoose.Schema({
-    userID: {
-        type: Number,
-        required: true,
-        },
     name:{
         first: {
             type: String,
@@ -14,6 +10,10 @@ const UserSchema = new mongoose.Schema({
             type: String,
             required: true
         }
+    },
+    userName: {
+        type: String,
+        required: true
     },
     email: {
         type: String,
@@ -27,10 +27,13 @@ const UserSchema = new mongoose.Schema({
         street: {
             type: String
         },
+        state:{
+            type: String
+        },
         zipcode: {
             type: String
         },
-        place: {
+        city: {
             type: String
         }
     },

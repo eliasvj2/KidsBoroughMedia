@@ -10,7 +10,7 @@ router.use(verifyJWT);
 
 router.get("/", getAllOrders);
 router.post("/", createOrder);
-router.patch("/", updateOrderById);
-router.delete("/", deleteOrderById)
+router.put("/:id", updateOrderById);
+router.delete("/:id", deleteOrderById)
 
 export default router;

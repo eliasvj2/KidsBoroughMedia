@@ -1,9 +1,30 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Nav from '../components/Nav'
 import "../css/login.css";
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import { useContext } from 'react';
+import { AuthContext } from '../hooks/authContext';
 
 const Login = () => {
+    const [username, setuserName] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      try{
+        const data = {
+          username,
+          password
+        };
+        await login(data);
+        navigate("/");
+
+      }catch(err){
+        console.log(err);
+      }    
+      };
   return (
     <div>
         <Nav/>
@@ -14,19 +35,19 @@ const Login = () => {
         <div className="row d-flex align-items-center justify-content-center h-100">
         <div className="col-md-8 col-lg-7 col-xl-6">
             <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
-            class="img-fluid" alt="Phone image"/>
+            class="img-fluid" alt="Phone "/>
         </div>
         <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
             <form>
             {/* <!-- Email input --> */}
             <div data-mdb-input-init class="form-outline mb-4">
-                <input type="email" id="form1Example13" className="form-control form-control-lg" />
-                <label className="form-label text-purple h4" for="form1Example13">Email address</label>
+                <input type="email" id="form1Example13" className="form-control form-control-lg" onChange={(e) => setuserName(e.target.value)} />
+                <label className="form-label text-purple h4" for="form1Example13">Username</label>
             </div>
 
             {/* <!-- Password input --> */}
             <div data-mdb-input-init className="form-outline mb-4">
-                <input type="password" id="form1Example23" className="form-control form-control-lg" />
+                <input type="password" id="form1Example23" className="form-control form-control-lg" onChange={(e) => setPassword(e.target.value)}/>
                 <label className="form-label text-purple h4" for="form1Example23">Password</label>
             </div>
 
@@ -42,7 +63,7 @@ const Login = () => {
             <Link to={"/register"} ><p className='text-purple h4'>Don't have an account? <a href="#!" class="text-yellow">Register here</a></p> </Link>
             
             {/* <!-- Submit button --> */}
-            <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-primary btn-lg btn-block h4">Sign in</button>
+            <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-primary btn-lg btn-block h4" onClick={handleSubmit}>Sign in</button>
 
            
 

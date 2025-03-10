@@ -1,12 +1,15 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { Link } from 'react-router'
 import Logo from './Logo'
 import "../css/nav.css"
 
+
 function Nav() {
+ 
   return (
     <div>
          <Logo/>
+         
     <nav className="navbar navbar-expand-lg " >   
         <div className="container-fluid">
           <div className="collapse navbar-collapse" id="navbarNav">

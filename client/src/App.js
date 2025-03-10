@@ -5,7 +5,6 @@ import Orders from "./pages/Orders";
 import Tracking from "./pages/Tracking";
 import Upload from "./pages/Upload";
 import 'bootstrap/dist/css/bootstrap.css';
-import Info from './pages/Info';
 import Testing from './pages/Testing';
 import Login from './pages/Login';
 import Register from './pages/Register';
