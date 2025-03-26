@@ -1,6 +1,7 @@
 import React from 'react'
 import Nav from '../components/Nav'
 import "../css/tracking.css";
+import { Link } from 'react-router';
 
 const Tracking = () => {
   return (
@@ -8,56 +9,56 @@ const Tracking = () => {
 
      
       <Nav/>
-      <h1>Tracking</h1>
-        <section class="" style={{backgroundColor: "#eee;"}}>
-    <div class="container py-5 h-100">
-      <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col">
-          <div class="card card-stepper" style={{borderRadius: "10px;"}}>
-            <div class="card-body p-4">
-
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex flex-column">
-                  <span class="lead fw-normal">Your order has been delivered</span>
-                  <span class="text-muted small">by DHFL on 21 Jan, 2020</span>
+     
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css"/>
+<div class="container padding-bottom-3x mb-1">
+        <div class="card mb-3">
+          <div class="p-4 text-center text-white text-lg bg-dark rounded-top"><span class="text-uppercase">Tracking Order No - </span><span class="text-medium">34VB5540K83</span></div>
+          <div class="d-flex flex-wrap flex-sm-nowrap justify-content-between py-3 px-2 bg-secondary">
+            <div class="w-100 text-center py-1 px-2"><span class="text-medium">Shipped Via:</span> UPS Ground</div>
+            <div class="w-100 text-center py-1 px-2"><span class="text-medium">Status:</span> Checking Quality</div>
+            <div class="w-100 text-center py-1 px-2"><span class="text-medium">Expected Date:</span> SEP 09, 2017</div>
+          </div>
+          <div class="card-body">
+            <div class="steps d-flex flex-wrap flex-sm-nowrap justify-content-between padding-top-2x padding-bottom-1x">
+              <div class="step completed">
+                <div class="step-icon-wrap">
+                  <div class="step-icon"><i class="pe-7s-cart"></i></div>
                 </div>
-                <div>
-                  <button data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary" type="button">Track order details</button>
+                <h4 class="step-title">Confirmed Order</h4>
+              </div>
+              <div class="step completed">
+                <div class="step-icon-wrap">
+                  <div class="step-icon"><i class="pe-7s-config"></i></div>
                 </div>
+                <h4 class="step-title">Processing Order</h4>
               </div>
-              <hr class="my-4"/>
-
-              <div class="d-flex flex-row justify-content-between align-items-center align-content-center">
-                <span class="dot"></span>
-                <hr class="flex-fill track-line"/><span class="dot"></span>
-                <hr class="flex-fill track-line"/><span class="dot"></span>
-                <hr class="flex-fill track-line"/><span class="dot"></span>
-                <hr class="flex-fill track-line"/><span
-                  class="d-flex justify-content-center align-items-center big-dot dot">
-                  <i class="fa fa-check text-white"></i></span>
-              </div>
-
-              <div class="d-flex flex-row justify-content-between align-items-center">
-                <div class="d-flex flex-column align-items-start"><span>15 Mar</span><span>Order placed</span>
+              <div class="step completed">
+                <div class="step-icon-wrap">
+                  <div class="step-icon"><i class="pe-7s-medal"></i></div>
                 </div>
-                <div class="d-flex flex-column justify-content-center"><span>15 Mar</span><span>Order
-                    placed</span></div>
-                <div class="d-flex flex-column justify-content-center align-items-center"><span>15
-                    Mar</span><span>Order Dispatched</span></div>
-                <div class="d-flex flex-column align-items-center"><span>15 Mar</span><span>Out for
-                    delivery</span></div>
-                <div class="d-flex flex-column align-items-end"><span>15 Mar</span><span>Delivered</span></div>
+                <h4 class="step-title">Quality Check</h4>
               </div>
-
+              <div class="step">
+                <div class="step-icon-wrap">
+                  <div class="step-icon"><i class="pe-7s-car"></i></div>
+                </div>
+                <h4 class="step-title">Product Dispatched</h4>
+              </div>
+              <div class="step">
+                <div class="step-icon-wrap">
+                  <div class="step-icon"><i class="pe-7s-home"></i></div>
+                </div>
+                <h4 class="step-title">Product Delivered</h4>
+              </div>
             </div>
           </div>
         </div>
+        <div class="d-flex flex-wrap flex-md-nowrap justify-content-center justify-content-sm-between align-items-center">
+          
+          <div class="text-left text-sm-right"><Link to={"/order"}><button class="btn btn-outline-primary btn-rounded btn-sm" data-toggle="modal" data-target="#orderDetails">View Order Details</button></Link></div>
+        </div>
       </div>
-    </div>
-  </section>
-      
-
-
     </div>
   )
 }

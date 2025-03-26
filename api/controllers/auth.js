@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { User } from "../Models/user.js";
 
 export const register = async (req, res) =>{
-    const { firstName, password, lastName, email, street, city, state, zip, phoneNumber, username } = req.body
+    const { password, username, selectedRole } = req.body
 
     // Confirm data
     if (!username || !password) {
@@ -20,21 +20,24 @@ export const register = async (req, res) =>{
 
     // Hash password 
     const hashedPwd = await bcrypt.hash(password, 10) // salt rounds
-
-    const newUser = {
-        name: {first: firstName, last: lastName},
-        userName: username,
-        email: email,
-        password: hashedPwd,
-        address: {
-            street: street,
-            state: state,
-            zipcode: zip,
-            city: city,
-        },
-        phoneNumber: phoneNumber
-        
-    };
+    let newUser = {};
+    if(selectedRole){
+         newUser = {
+            userName: username,
+            password: hashedPwd,
+            roles: selectedRole
+            
+        };
+    }else{
+         newUser = {
+            userName: username,
+            password: hashedPwd,
+            roles: "User"
+         
+            
+        };
+    }
+    
 
     // Create and store new user 
     const user = await User.create(newUser)
@@ -63,6 +66,7 @@ export const login = async (req, res) => {
     if (!foundUser) {
         return res.status(401).json({ message: 'Unauthorized' })
     }
+    
 
     const match = await bcrypt.compare(password, foundUser[0].password)
 
@@ -73,8 +77,9 @@ export const login = async (req, res) => {
     const accessToken = jwt.sign(
         {
             "UserInfo": {
-                "username": foundUser[0].name.first,
-                "roles": foundUser[0].roles
+                "username": foundUser[0].userName,
+                "roles": foundUser[0].roles,
+                "userId": foundUser[0]._id
             }
         },
         process.env.ACCESS_TOKEN_SECRET,

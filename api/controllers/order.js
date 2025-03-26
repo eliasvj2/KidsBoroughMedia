@@ -1,47 +1,77 @@
 import jwt from "jsonwebtoken";
 import { Order } from "../Models/order.js";
+import {faker} from "@faker-js/faker"
+import { User } from "../Models/user.js";
+import mongoose from "mongoose";
+import { ObjectId } from "mongodb";
 
+export const generate = async (req, res)=>{
+  try{
+ 
+      let newOrder = {
+        userID: faker.lorem.word(8),
+        price: faker.number.int(),  
+        date: faker.date.past(),
+        delivered: faker.lorem.word(),
+        name: faker.person.firstName(),
+        img: faker.image.avatar()
+    }
+    await Order.create(newOrder);
+            
+    return res.status(200).json(newOrder);
+                
 
+  }catch(error){
+    console.log(error);
+  }
+}
 export const getAllOrders = async(req,res)=>{
     try {
         const orders = await Order.find({});
-    
-        return response.status(200).json({
-          count: orders.length,
-          data: orders,
+        const ordersWithId = orders.map((order) => {
+          const orderObject = order.toObject();
+          const { _id, ...rest } = orderObject; // Remove _id
+          return { ...rest, id: _id.toString() }; // Add id
         });
+        res.header('X-Total-Count', orders.length); // Add the X-Total-Count header
+        res.header('Access-Control-Expose-Headers', 'X-Total-Count'); // Expose the header
+        return res.status(200).json(ordersWithId);
       } catch (error) {
         console.log(error.message);
-        response.status(500).send({ message: error.message });
+        res.status(500).send({ message: error.message });
       }
 };
 
-export const createOrder = async(req,res)=>{
-    try {
-        if (
-          !request.body.orderID ||
-          !request.body.userID ||
-          !request.body.product ||
-          !request.body.price
-        ) {
-          return response.status(400).send({
-            message: 'Send all required fields: orderID, userID, product, price',
-          });
-        }
-        const newOrder = {
-          orderID: request.body.orderID,
-          userID: request.body.userID,
-          product: request.body.product,
-          price: request.body.price
+export const orderByUserId = async(req, res)=>{
+  try{
+ 
+    const id = new ObjectId(req.body.userId);
+    
+    const user = await User.findById(id);
+    return res.status(201).send(user);
 
-        };
-    
-        const order = await Order.create(newOrder);
-    
-        return response.status(201).send(newOrder);
+  }catch(error){
+    console.log(error.message);
+    res.status(500).send({message: error.message});
+  }
+}
+
+export const addOrderToUser = async(req,res)=>{
+    try {
+       const id = new ObjectId(req.body.id );
+       const orderId = req.body.orderId;
+
+        
+      const user = await User.findByIdAndUpdate(
+        id,
+        { $push: { orders: orderId } },
+        { new: true } // Return the updated document
+      );
+      
+      return res.status(201).send(user);
       } catch (error) {
         console.log(error.message);
-        response.status(500).send({ message: error.message });
+        res.status(500).send({ message: error.message });
       }
 };
 

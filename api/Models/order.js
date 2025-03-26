@@ -3,20 +3,25 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const order = new Schema({
-	orderID: {
-    type: Number,
+	
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
-	},
-  userID: {
-    type: String,
-    required: true,
-    ref: "User"
   },
-  product: {
+  name: {
     type: String,
     required: true
   },
   price: {
+    type: Number,
+    required: true
+  },
+  date: {
+    type: String,
+    required: true
+  },
+  delivered: {
     type: String,
     required: true
   }

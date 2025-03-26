@@ -1,11 +1,13 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import { Link } from 'react-router'
 import Logo from './Logo'
 import "../css/nav.css"
+import { useContext } from 'react';
+import { AuthContext } from '../hooks/authContext';
 
 
 function Nav() {
- 
+ const { currentUser } = useContext(AuthContext);
   return (
     <div>
          <Logo/>
@@ -15,22 +17,8 @@ function Nav() {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link className="nav-link text-purple" aria-current="page" to={"/"}>Home</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link text-purple" to={"/product"}>Products</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link text-purple" to={"/tracking"}>Tracking</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link text-purple" to={"/upload"}>Upload</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link text-purple" to={"/order"}>Orders</Link>
-              </li>
-              
-            
+                {currentUser && <Link className="nav-link text-purple" to={"/order"}>My Orders</Link>}
+              </li> 
             </ul>
           </div>
         </div>

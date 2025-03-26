@@ -1,0 +1,20 @@
+FROM mongo:latest
+
+# Optionally, you can set environment variables or initialize data here
+# For example, to set a root password:
+# ENV MONGO_INITDB_ROOT_USERNAME admin
+# ENV MONGO_INITDB_ROOT_PASSWORD password
+
+# If you need to initialize data, create a /docker-entrypoint-initdb.d/init-mongo.js
+# and place it in the same directory as this Dockerfile.
+# Example init-mongo.js:
+# db.createUser({
+#   user: "myuser",
+#   pwd: "mypassword",
+#   roles: [ { role: "readWrite", db: "mydb" } ]
+# });
+# db = db.getSiblingDB("mydb");
+# db.createCollection("mycollection");
+# db.mycollection.insert({ name: "example" });
+
+EXPOSE 27017
