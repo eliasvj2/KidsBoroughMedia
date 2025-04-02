@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { User } from "../Models/user.js";
 
 export const register = async (req, res) =>{
-    const { password, username, selectedRole } = req.body
+    const { password, username, role, email } = req.body
 
     // Confirm data
     if (!username || !password) {
@@ -20,23 +20,14 @@ export const register = async (req, res) =>{
 
     // Hash password 
     const hashedPwd = await bcrypt.hash(password, 10) // salt rounds
-    let newUser = {};
-    if(selectedRole){
-         newUser = {
-            userName: username,
-            password: hashedPwd,
-            roles: selectedRole
-            
-        };
-    }else{
-         newUser = {
-            userName: username,
-            password: hashedPwd,
-            roles: "User"
-         
-            
-        };
-    }
+    let newUser = {
+        username: username,
+        password: hashedPwd,
+        role: role,
+        email: email
+    };
+    
+    
     
 
     // Create and store new user 
@@ -60,32 +51,31 @@ export const login = async (req, res) => {
         return res.status(400).json({ message: 'All fields are required' })
     }
 
-    const foundUser = await User.find({ userName: username }).exec()
+    const foundUser = await User.find({ username: username }).exec()
     
 
     if (!foundUser) {
         return res.status(401).json({ message: 'Unauthorized' })
     }
-    
-
+ 
     const match = await bcrypt.compare(password, foundUser[0].password)
 
     if (!match) return res.status(401).json({ message: 'Unauthorized' })
 
-    console.log();
-
+    
+        
     const accessToken = jwt.sign(
         {
             "UserInfo": {
-                "username": foundUser[0].userName,
-                "roles": foundUser[0].roles,
+                "username": foundUser[0].username,
+                "roles": foundUser[0].role,
                 "userId": foundUser[0]._id
             }
         },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: '15m' }
     )
-
+    
     // Create secure cookie with access token 
     res.cookie('jwt', accessToken, {
         httpOnly: true, //accessible only by web server 

@@ -27,15 +27,17 @@ export const generate = async (req, res)=>{
 }
 export const getAllOrders = async(req,res)=>{
     try {
-        const orders = await Order.find({});
-        const ordersWithId = orders.map((order) => {
-          const orderObject = order.toObject();
-          const { _id, ...rest } = orderObject; // Remove _id
-          return { ...rest, id: _id.toString() }; // Add id
-        });
+      const orders = await Order.find({}); // Fetch all orders, including _id
+
+      // Rename _id to id
+      const formattedOrders = orders.map(order => {
+        const { _id, ...rest } = order.toObject();
+        return { id: _id, ...rest };
+      });
+        
         res.header('X-Total-Count', orders.length); // Add the X-Total-Count header
         res.header('Access-Control-Expose-Headers', 'X-Total-Count'); // Expose the header
-        return res.status(200).json(ordersWithId);
+        return res.status(200).json(formattedOrders);
       } catch (error) {
         console.log(error.message);
         res.status(500).send({ message: error.message });
@@ -47,7 +49,7 @@ export const orderByUserId = async(req, res)=>{
  
     const id = new ObjectId(req.body.userId);
     
-    const user = await User.findById(id);
+    const user = await Order.findById(id);
     return res.status(201).send(user);
 
   }catch(error){

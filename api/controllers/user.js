@@ -4,55 +4,68 @@ import { User } from "../Models/user.js";
 
 export const getAllUsers = async(req, res)=>{
     // Get all users from MongoDB
-    const users = await User.find().select('-password').lean()
+    const users = await User.find({}); // Include _id
 
+    // Rename _id to id
+    const formattedUsers = users.map(user => {
+      const { _id, ...rest } = user.toObject(); // Convert to plain object
+      return { id: _id, ...rest };
+    });
+    res.header('X-Total-Count', users.length); // Add the X-Total-Count header
+    res.header('Access-Control-Expose-Headers', 'X-Total-Count'); 
     // If no users 
     if (!users?.length) {
         return res.status(400).json({ message: 'No users found' })
     }
    
-    res.json(users);
+    res.json(formattedUsers);
 };
 
 export const createUser = async(req,res) =>{
-
+    try {
+        const { username, password, email, role, name, contactDetails } = req.body;
+    
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+    
+        const newUser = new User({
+          username,
+          password: hashedPassword,
+          email,
+          role,
+          name,
+          contactDetails,
+        });
+    
+        const savedUser = await newUser.save();
+        res.status(201).json(savedUser); // 201 Created
+      } catch (err) {
+        console.error(err);
+        // Handle duplicate key errors (username or email already exists)
+        if (err.code === 11000) {
+          return res.status(409).json({ message: 'Username or email already exists' }); // 409 Conflict
+        }
+        res.status(500).json({ message: 'Server error', error: err.message });
+      }
 };
 
 export const updateUser = async(req, res)=>{
-    const { id, username, roles, active, password } = req.body
-
-    // Confirm data 
-    if (!id || !username || !Array.isArray(roles) || !roles.length || typeof active !== 'boolean') {
-        return res.status(400).json({ message: 'All fields except password are required' })
-    }
-
-    // Does the user exist to update?
-    const user = await User.findById(id).exec()
-
-    if (!user) {
-        return res.status(400).json({ message: 'User not found' })
-    }
-
-    // Check for duplicate 
-    const duplicate = await User.findOne({ username }).collation({ locale: 'en', strength: 2 }).lean().exec()
-
-    // Allow updates to the original user 
-    if (duplicate && duplicate?._id.toString() !== id) {
-        return res.status(409).json({ message: 'Duplicate username' })
-    }
-
-    user.username = username
-    user.roles = roles
-    user.active = active
-
-    if (password) {
-        // Hash password 
-        user.password = await bcrypt.hash(password, 10) // salt rounds 
-    }
-
-    const updatedUser = await user.save()
-
-    res.json({ message: `${updatedUser.username} updated` })
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+          req.params.id,
+          req.body,
+          { new: true, runValidators: true }
+        );
+    
+        if (!updatedUser) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+    
+        res.json(updatedUser);
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error', error: err.message });
+      }
 };
 
 export const deleteUser = async(req,res) =>{

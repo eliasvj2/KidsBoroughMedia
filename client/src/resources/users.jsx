@@ -6,9 +6,9 @@ const UserList = () => (
   <List>
   <Datagrid rowClick="edit">
       <TextField source="id" label="_id" />
-      <TextField source="userName" label="userName" />
-      <TextField source="roles" label="roles" />
-      <TextField source="active" label="active" />
+      <TextField source="username" label="username" />
+      <TextField source="role" label="role" />
+      <TextField source="email" label="email" />
       
       <EditButton />
       <DeleteButton />
@@ -16,14 +16,6 @@ const UserList = () => (
 </List>
 );
 
-const UserEdit = () => (
-  <Edit>
-    <SimpleForm>
-      <TextInput source="name" />
-      <TextInput source="email" />
-    </SimpleForm>
-  </Edit>
-);
 
 const UserCreate = (props) => (
   <Create {...props}>

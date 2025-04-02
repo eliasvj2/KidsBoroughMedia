@@ -17,24 +17,23 @@ const Orders = () => {
     { id: "#1fkdsl2341", name: 'Self Service', price: 80, date: "01/01/2025", delivered: "On going", imgSource: SelfService },
     { id: "#2dhgkskle34", name: 'Virtual Classroom', price: 50, date: "05/06/2025", delivered: "02/25/2025", imgSource: virtualClassroom }
   ];
-  useEffect(() => {
-    const fetchData = async ()=>{
-      try{
-        const userId = jwtDecode(currentUser.accessToken).UserInfo.userId;
-        const res = await axios.post("http://localhost:3500/order/orders", userId);
-        setOrders(res.data);
-      }catch(err){
+  // useEffect(() => {
+  //   const fetchData = async ()=>{
+  //     try{
+  //       const userId = jwtDecode(currentUser.accessToken).UserInfo.userId;
+  //       const res = await axios.post("http://localhost:3500/order/orders", userId);
+  //       setOrders(res.data);
+  //     }catch(err){
 
-      }
-    };
-    fetchData();
+  //     }
+  //   };
+  //   fetchData();
     
-  },[]);
+  // },[]);
   
   return (
     <div>
       
-{console.log(orders)}
 
       <Nav/>
     

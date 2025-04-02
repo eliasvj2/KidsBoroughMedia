@@ -18,9 +18,9 @@ const Login = () => {
     useEffect(() => {
       if(currentUser){
               const role = jwtDecode(currentUser.accessToken).UserInfo.roles;
-              console.log("from useEffect");
+              
               if(role === "Admin"){
-                navigate("/admin/users");
+                navigate("/admin/user");
               }else{
                 navigate('/order');
               }}
@@ -49,22 +49,22 @@ const Login = () => {
             <div class="container py-5 h-100">
               <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                  <div class="card bg-dark text-white" style={{borderRadius: "1rem;"}}>
+                  <div class="card bg-login text-white" style={{borderRadius: "1rem;"}}>
                     <div class="card-body p-5 text-center">
 
                       <div class="mb-md-5 mt-md-4 pb-5">
 
-                        <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
-                        <p class="text-white-50 mb-5">Please enter your login and password!</p>
+                        <h2 class="fw-bold mb-2 text-uppercase card-login-text">Login</h2>
+                        <p class="card-login-text mb-5">Please enter your username and password!</p>
 
                         <div data-mdb-input-init class="form-outline form-white mb-4">
                           <input type="email" id="typeEmailX" onChange={(e) => setuserName(e.target.value)} class="form-control form-control-lg" />
-                          <label class="form-label" for="typeEmailX">Username</label>
+                          <label class="form-label card-login-text" for="typeEmailX">Username</label>
                         </div>
 
                         <div data-mdb-input-init class="form-outline form-white mb-4">
                           <input type="password" id="typePasswordX" class="form-control form-control-lg" onChange={(e) => setPassword(e.target.value)} />
-                          <label class="form-label" for="typePasswordX">Password</label>
+                          <label class="form-label card-login-text" for="typePasswordX">Password</label>
                         </div>
 
                         <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
@@ -79,10 +79,7 @@ const Login = () => {
 
                       </div>
 
-                      <div>
-                        <p class="mb-0">Don't have an account? <a href="#!" class="text-white-50 fw-bold">Sign Up</a>
-                        </p>
-                      </div>
+                      
 
                     </div>
                   </div>
